@@ -138,7 +138,7 @@ export default function Home() {
 
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col">
         <p id="leadIn" className="font-mono text-5xl lg:text-2x1 fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
-          We&apos;ll pick a game you haven't played!
+          We&apos;ll pick a game you haven&apos;t played!
         </p>
       </div>
 
