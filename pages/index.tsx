@@ -323,7 +323,7 @@ function deleteGame(userId, gameName) {
           </label>
                 {savedGames.map((val) => {
             return (
-                  <div className="relative flex place-items-center">
+                  <div key={val.name} className="relative flex place-items-center">
                     <a href={val.url}><Image 
                       src={val.image}
                       alt=""
