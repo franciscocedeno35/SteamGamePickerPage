@@ -8,6 +8,11 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, child, get, set, push, update, remove} from "firebase/database";
 
 export default function Home() {
+  interface GameData {
+  image: string;
+  name: string;
+  url: string;
+}
   const [imageUrl, setImageUrl] = useState('');
 
 
@@ -77,7 +82,7 @@ function showSavedGames(userId: string) {
     //steamUserID includes long link at beginning, we just want identifier number
     let user = getShortId(userId);
     const dbRef = ref(database);
-    const gameData = {
+    const gameData: GameData = {
       image: imageUrl,
       name: gameName,
       url: gameURL,
@@ -87,7 +92,7 @@ function showSavedGames(userId: string) {
       if (snapshot.exists()) {
         // console.log(snapshot.val());
         //update user
-        const updates = {};
+        const updates: { [key: string]: GameData } = {};
         updates['users/' + user + '/' + gameName] = gameData;
         update(dbRef, updates);
         alert("Successful Save");
