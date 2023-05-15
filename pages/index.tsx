@@ -41,7 +41,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const dbRef = ref(database);
 
-function getShortId(userId) {
+function getShortId(userId: string) {
     let user = "";
     if (userId.includes("profiles")) {
       user = userId.substring(36)
@@ -51,7 +51,7 @@ function getShortId(userId) {
     return user;
 }
 
-function showSavedGames(userId) {
+function showSavedGames(userId: string) {
     //steamUserID includes long link at beginning, we just want identifier number
     let user = getShortId(userId);
 
@@ -73,7 +73,7 @@ function showSavedGames(userId) {
 
 
 
-  function writeUserData(userId, gameName, gameURL, imageUrl) {
+  function writeUserData(userId: string, gameName: string, gameURL: string, imageUrl: string) {
     //steamUserID includes long link at beginning, we just want identifier number
     let user = getShortId(userId);
     const dbRef = ref(database);
@@ -115,7 +115,7 @@ function showSavedGames(userId) {
 
 }
 
-function deleteGame(userId, gameName) {
+function deleteGame(userId: string, gameName: string) {
     let user = getShortId(userId);
     let link = 'users/' + user + '/' + gameName;
     console.log(link);
