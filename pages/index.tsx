@@ -3,6 +3,9 @@ import Image from 'next/image';
 import { FriendListResponse, OwnedGame, OwnedGamesResponse, OwnershipResponse } from './api/steam';
 import { useRouter } from 'next/router';
 import { Checkbox } from '@nextui-org/react';
+import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, child, get, set, push, update, remove} from "firebase/database";
 
 export default function Home() {
   const [imageUrl, setImageUrl] = useState('');
@@ -11,11 +14,129 @@ export default function Home() {
 
   const [steamUrl, setSteamUrl] = useState('');
 
+  const [gameURLState, setGameURLState] = useState('');
+  const [gameName, setGameName] = useState('');
+
   var doFriendCheck = false;
   var unplayedOnly = true;
+  const [savedGames, setSavedGames] = useState<any[]>([]);
+  // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBwuF-spiiXXxy-ENgOTBg3N-0pIVa51Q8",
+    authDomain: "steam-game-picker-785fa.firebaseapp.com",
+    projectId: "steam-game-picker-785fa",
+    storageBucket: "steam-game-picker-785fa.appspot.com",
+    messagingSenderId: "112549773860",
+    appId: "1:112549773860:web:f3c1a7aa8bcbcac5eeceb1",
+    measurementId: "G-LYYCRVWR0G",
+    databaseURL: "https://steam-game-picker-785fa-default-rtdb.firebaseio.com/"
+  };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+
+// Initialize Realtime Database and get a reference to the service
+const database = getDatabase(app);
+const dbRef = ref(database);
+
+function getShortId(userId) {
+    let user = "";
+    if (userId.includes("profiles")) {
+      user = userId.substring(36)
+    } else {
+      user = userId.substring(30)
+    }
+    return user;
+}
+
+function showSavedGames(userId) {
+    //steamUserID includes long link at beginning, we just want identifier number
+    let user = getShortId(userId);
+
+  get(child(dbRef, 'users/' + user)).then((snapshot) => {
+        if (snapshot.exists()) {
+          const savedGamesData = Object.values(snapshot.val()); // Convert object to array
+          setSavedGames(savedGamesData);
+          //update user
+
+        } else {
+          console.log("No data available");
+          //create user
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+
+}
+
+
+
+  function writeUserData(userId, gameName, gameURL, imageUrl) {
+    //steamUserID includes long link at beginning, we just want identifier number
+    let user = getShortId(userId);
+    const dbRef = ref(database);
+    const gameData = {
+      image: imageUrl,
+      name: gameName,
+      url: gameURL,
+    }
+
+    get(child(dbRef, 'users/')).then((snapshot) => {
+      if (snapshot.exists()) {
+        // console.log(snapshot.val());
+        //update user
+        const updates = {};
+        updates['users/' + user + '/' + gameName] = gameData;
+        update(dbRef, updates);
+        alert("Successful Save");
+        showSavedGames(userId);
+
+
+      } else {
+        console.log("No data available");
+        //create user
+      set(ref(database, 'users/' + user + '/' + gameName), gameData);
+      alert("Successful Save");
+      showSavedGames(userId);
+
+      }
+    }).catch((error) => {
+      console.error(error);
+      alert("Save unsuccessful :()");
+    });
+    // console.log(savedGames);
+    // savedGames.push(gameData)
+    // let newArr = savedGames;
+    // console.log(savedGames);
+    // setSavedGames(savedGames);
+
+
+}
+
+function deleteGame(userId, gameName) {
+    let user = getShortId(userId);
+    let link = 'users/' + user + '/' + gameName;
+    console.log(link);
+    const referenceToDelete = child(dbRef, link);
+
+  remove(referenceToDelete)
+    .then(() => {
+      console.log('Game deleted successfully.');
+    })
+    .catch((error) => {
+      console.error('Error deleting reference:', error);
+    });
+
+    showSavedGames(userId);
+}
+
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSteamUrl(event.target.value);
+    showSavedGames(event.target.value);
   };
 
   const handleFriendChange = (isSelected: boolean) => {
@@ -102,10 +223,11 @@ export default function Home() {
     //Data Showcasing Section
     //get game name and display it
     (document.getElementById('gameImg') as HTMLImageElement).alt = pickedGame.name;
+
     // setImageUrl(data.imageUrl);
 
     (document.getElementById('gameName') as HTMLParagraphElement).innerText = pickedGame.name;
-
+    setGameName(pickedGame.name);
     //display app header image, used in store
     const gameImage = "https://steamcdn-a.akamaihd.net/steam/apps/" + pickedGame.appid +"/header.jpg";
     (document.getElementById('gameImg') as HTMLImageElement).src = gameImage;
@@ -113,6 +235,7 @@ export default function Home() {
 
     //link the steam run link to the header image
     const gameUrl = "steam://run/" + pickedGame.appid;
+    setGameURLState(gameUrl);
     var a = (document.getElementById('runLink')) as HTMLLinkElement;
     a.setAttribute("href", gameUrl);
 
@@ -154,6 +277,14 @@ export default function Home() {
 
 
         /></a>
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 m-4"
+            type="button"
+            style={{display: imageUrl ? 'block': 'none'}}
+            onClick={() => {writeUserData(steamUrl, gameName, gameURLState, imageUrl)}}
+          >
+            Save This Game
+          </button>
       </div>
 
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col" style={{ display: imageUrl ? 'block' : 'none' }}>
@@ -187,6 +318,31 @@ export default function Home() {
           </button>
         </div>
       </form>
+          <label className="block font-mono text-3xl text-gray-200 mb-2" htmlFor="user" style={{display: steamUrl ? 'block': 'none'}}>
+            Saved Games: 
+          </label>
+                {savedGames.map((val) => {
+            return (
+                  <div className="relative flex place-items-center">
+                    <a href={val.url}><Image 
+                      src={val.image}
+                      alt=""
+                      width={460}
+                      height={215} 
+                      priority
+
+
+                    /></a>
+                      <button
+                        className="bg-red-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 m-4"
+                        type="button"
+                        onClick={() => {deleteGame(steamUrl, val.name)}}
+                      >
+                        Delete Game
+                      </button>
+                  </div>
+              )
+          })}
     </main>
   )
 }
