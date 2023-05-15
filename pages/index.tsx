@@ -324,7 +324,7 @@ function deleteGame(userId, gameName) {
                 {savedGames.map((val) => {
             return (
                   <div key={val.name} className="relative flex place-items-center">
-                    <a href={val.url}><Image 
+                    <a key={val.url} href={val.url}><Image 
                       src={val.image}
                       alt=""
                       width={460}
@@ -333,7 +333,7 @@ function deleteGame(userId, gameName) {
 
 
                     /></a>
-                      <button
+                      <button key={val.image}
                         className="bg-red-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 m-4"
                         type="button"
                         onClick={() => {deleteGame(steamUrl, val.name)}}
