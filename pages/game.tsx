@@ -5,8 +5,8 @@ export default function Game() {
   return (
 
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col">
-        <p className="font-mono text-5xl lg:text-2x1 fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col mb-8">
+        <p className="font-mono text-5xl lg:text-2xl fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
           We picked a game for you!
         </p>
       </div>
@@ -15,13 +15,13 @@ export default function Game() {
         <Image
           src="/game_image.jpeg"
           alt="Steam Logo"
-          width={450}
-          height={250}
+          width={350}
+          height={150}
           priority
         />
       </div>
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col">
-        <p className="font-mono text-5xl lg:text-2x1 fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col mb-8">
+        <p className="font-mono text-5xl lg:text-2xl fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
           Game Title
         </p>
       </div>

@@ -264,7 +264,7 @@ function deleteGame(userId: string, gameName: string) {
         />
       </div>
 
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono lg:flex flex-col mb-8">
         <p id="leadIn" className="font-mono text-5xl lg:text-2x1 fixed left-0 top-0 flex w-full items-center justify-center border-b border-gray-300 bg-gray-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/60 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/60">
           We&apos;ll pick a game you haven&apos;t played!
         </p>
@@ -298,7 +298,7 @@ function deleteGame(userId: string, gameName: string) {
       </div>
 
       <form className="w-128 max-w-3xl mx-auto">
-        <div className="mb-4">
+        <div className="mb-8">
           <label className="block font-mono text-3xl text-gray-200 mb-2" htmlFor="user">
             Enter User ID:
           </label>
@@ -323,30 +323,37 @@ function deleteGame(userId: string, gameName: string) {
           </button>
         </div>
       </form>
-          <label className="block font-mono text-3xl text-gray-200 mb-2" htmlFor="user" style={{display: steamUrl ? 'block': 'none'}}>
+          <label className="block font-mono text-3xl text-gray-200 mb-4" htmlFor="user" style={{display: steamUrl ? 'block': 'none'}}>
             Saved Games: 
           </label>
-                {savedGames.map((val) => {
-            return (
-                  <div key={val.name} className="relative flex place-items-center">
-                    <a key={val.url} href={val.url}><Image 
-                      src={val.image}
-                      alt=""
-                      width={460}
-                      height={215} 
-                      priority
-
-
-                    /></a>
-                      <button key={val.image}
-                        className="bg-red-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 m-4"
-                        type="button"
-                        onClick={() => {deleteGame(steamUrl, val.name)}}
-                      >
-                        Delete Game
-                      </button>
+            {savedGames.map((val) => {
+              return (
+                <div key={val.name} className="bg-gradient-to-br from-blue-800 via-blue-400 to-blue-200 p-4 mb-4 rounded-lg">
+                  <div className="relative flex place-items-center">
+                    <a key={val.url} href={val.url}>
+                      <div className="bg-blue-gradient rounded-lg overflow-hidden">
+                        <Image
+                          src={val.image}
+                          alt=""
+                          width={460}
+                          height={215}
+                          priority
+                        />
+                      </div>
+                    </a>
+                    <button
+                      key={val.image}
+                      className="bg-red-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 m-4"
+                      type="button"
+                      onClick={() => {
+                        deleteGame(steamUrl, val.name);
+                      }}
+                    >
+                      Delete Game
+                    </button>
                   </div>
-              )
+                </div>
+              );
           })}
     </main>
   )
