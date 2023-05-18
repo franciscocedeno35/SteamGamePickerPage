@@ -270,7 +270,8 @@ function deleteGame(userId: string, gameName: string) {
         </p>
       </div>
 
-      <div className="bg-gradient-to-br from-blue-800 via-blue-400 to-blue-200 p-4 mb-4 rounded-lg relative flex place-items-center">
+      <div className="bg-gradient-to-br from-blue-800 via-blue-400 to-blue-200 p-4 mb-4 rounded-lg relative flex place-items-center"
+      style={{ display: imageUrl ? 'block' : 'none' }}>
         <a id="runLink" href=""><Image 
           id="gameImg"
           src={imageUrl}
